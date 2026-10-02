@@ -1,17 +1,17 @@
 #include <stdio.h>
 
-int digitFrequencyDifference(int n, int a, int b)
+int digitFrequencyDifference(int n, int a, int b, int *countA, int *countB)
 {
-    int countA = 0;
-    int countB = 0;
+    *countA = 0;
+    *countB = 0;
 
     if (n == 0)
     {
         if (a == 0)
-            countA = 1;
+            *countA = 1;
 
         if (b == 0)
-            countB = 1;
+            *countB = 1;
     }
     else
     {
@@ -20,19 +20,20 @@ int digitFrequencyDifference(int n, int a, int b)
             int digit = n % 10;
 
             if (digit == a)
-                countA++;
+                (*countA)++;
 
             if (digit == b)
-                countB++;
+                (*countB)++;
 
             n = n / 10;
         }
     }
 
-    if (countA > countB)
-        return countA - countB;
+    /* Calculate absolute difference */
+    if (*countA > *countB)
+        return *countA - *countB;
     else
-        return countB - countA;
+        return *countB - *countA;
 }
 
 int main()
@@ -52,56 +53,22 @@ int main()
         int a = testCases[i][1];
         int b = testCases[i][2];
 
-        int result = digitFrequencyDifference(n, a, b);
+        int countA;
+        int countB;
+
+        int result = digitFrequencyDifference(
+            n, a, b, &countA, &countB
+        );
 
         printf("Input: n = %d, a = %d, b = %d\n", n, a, b);
-        printf("Output: %d\n", result);
 
-        printf("Frequency of %d = ", a);
+        printf("Frequency of %d = %d\n", a, countA);
+        printf("Frequency of %d = %d\n", b, countB);
 
-        if (n == 0)
-        {
-            printf("%d", a == 0 ? 1 : 0);
-        }
-        else
-        {
-            int temp = n;
-            int countA = 0;
+        printf("Absolute difference = |%d - %d| = %d\n",
+               countA, countB, result);
 
-            while (temp > 0)
-            {
-                if (temp % 10 == a)
-                    countA++;
-
-                temp = temp / 10;
-            }
-
-            printf("%d", countA);
-        }
-
-        printf("; Frequency of %d = ", b);
-
-        if (n == 0)
-        {
-            printf("%d", b == 0 ? 1 : 0);
-        }
-        else
-        {
-            int temp = n;
-            int countB = 0;
-
-            while (temp > 0)
-            {
-                if (temp % 10 == b)
-                    countB++;
-
-                temp = temp / 10;
-            }
-
-            printf("%d", countB);
-        }
-
-        printf("\n\n");
+        printf("Output: %d\n\n", result);
     }
 
     return 0;
